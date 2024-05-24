@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AwesomeBot
@@ -17,6 +18,12 @@ namespace AwesomeBot
                     string configBotSection = "DisCatSharp" )
             : base( config, logger, serviceProvider, applicationLifetime, configBotSection )
         {
+        }
+
+        protected override Task PreConnectAsync()
+        {
+            Client.RegisterEventHandlers( Assembly.GetExecutingAssembly() );
+            return base.PreConnectAsync();
         }
 
         protected override async Task PostConnectAsync()
